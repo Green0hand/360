@@ -1,0 +1,31 @@
+import paramiko,time
+
+#-----------------------------config-------------------------------------------
+ip = 'xxx.xxx.xxx.xxx'
+username = "xxxxx"
+passwd = "xxxxx"
+#-----------------------------config-------------------------------------------
+
+def ssh_connect_server():
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        cur = ssh.connect(ip,22,username,passwd,timeout=5)
+    except e :
+        print("connect failed:",e)
+        print("60 seconds later will try connect again")
+        time.sleep(60)
+        ssh_connect_server()
+
+    print ("connect sucessful.")
+    while cur:
+        pass
+    else:
+        print("connection broken, try reconnect...")
+        time.sleep(2)
+        print("start connect...")
+        ssh_connect_server()
+
+if __name__== "__main__":
+    ssh_connect_server()
